@@ -9,6 +9,7 @@
       Lorem ipsum dolor sit amet consectetur, adipisicing elit. Laboriosam,
       voluptatum! Dolor quo, perspiciatis voluptas totam
     </p>
-    <a href="#" class="btn-card">Read</a>
+    <a href="#" class="btn-card" (click)="ir()">Go!</a>
+    <span [style.display]="destino.isSelected() ? '' : 'none'">- PREFERIDO -</span>
   </div>
 </div>
