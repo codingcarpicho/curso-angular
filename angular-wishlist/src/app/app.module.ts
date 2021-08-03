@@ -15,6 +15,8 @@ import { DestinosViajesEffects, DestinosViajeState, initializeDestinosViajesStat
 import { ActionReducerMap } from '@ngrx/store';
 import { StoreModule as NgRxStoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from "@ngrx/store-devtools";
+import { environment } from "../environments/environment";
 
 // definiendo direcciones del nav
 
@@ -53,7 +55,8 @@ let reducersInitialState = {
     FormsModule, //agregar un formulario
     ReactiveFormsModule,
     NgRxStoreModule.forRoot(reducers, { initialState: reducersInitialState }),
-    EffectsModule.forRoot([DestinosViajesEffects])
+    EffectsModule.forRoot([DestinosViajesEffects]),
+    StoreDevtoolsModule.instrument()
   ],
   providers: [
     DestinosApiClient

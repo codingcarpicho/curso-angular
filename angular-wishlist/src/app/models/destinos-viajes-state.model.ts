@@ -23,7 +23,9 @@ export const initializeDestinosViajesState = function() {
 //ACCIONES
 export enum DestinosViajesActionTypes {
     NUEVO_DESTINO = '[Destinos Viajes] Nuevo',
-    ELEGIDO_FAVORITO = '[Destinos Viajes] Favorito'
+    ELEGIDO_FAVORITO = '[Destinos Viajes] Favorito',
+    VOTE_UP = '[Destinos Viajes] Vote Up',
+    VOTE_DOWN = '[Destinos Viajes] Vote Down'
 }
 
 export class NuevoDestinoAction implements Action {
@@ -35,8 +37,17 @@ export class ElegidoFavoritoAction implements Action {
     type = DestinosViajesActionTypes.ELEGIDO_FAVORITO;
     constructor(public destino: DestinoViaje) {}
 }
+export class VoteUpAction implements Action {
+    type = DestinosViajesActionTypes.VOTE_UP;
+    constructor(public destino: DestinoViaje) {}
+}
+export class VoteDownAction implements Action {
+    type = DestinosViajesActionTypes.VOTE_DOWN;
+    constructor(public destino: DestinoViaje) {}
+}
 
-export type DestinosViajesActions = NuevoDestinoAction | ElegidoFavoritoAction;
+export type DestinosViajesActions = NuevoDestinoAction | ElegidoFavoritoAction |
+                                    VoteUpAction | VoteDownAction;
 
 // REDUCERS
 export function reducerDestinosViajes(
@@ -44,6 +55,12 @@ export function reducerDestinosViajes(
     action: DestinosViajesActions
 ): DestinosViajeState {
     switch (action.type) {
+        case DestinosViajesActionTypes.NUEVO_DESTINO: {
+            return {
+                ...state,
+                items: [...state.items, (action as NuevoDestinoAction).destino ]
+            };
+        }
         case DestinosViajesActionTypes.ELEGIDO_FAVORITO: {
             state.items.forEach(x => x.setSelected(false));
             const fav: DestinoViaje = (action as ElegidoFavoritoAction).destino;
@@ -52,6 +69,16 @@ export function reducerDestinosViajes(
                 ...state,
                 favorito: fav
             };
+        }
+        case DestinosViajesActionTypes.VOTE_UP: {
+            const d: DestinoViaje = (action as VoteUpAction).destino;
+            d.voteUp();
+            return { ...state };
+        }
+        case DestinosViajesActionTypes.VOTE_DOWN: {
+            const d: DestinoViaje = (action as VoteDownAction).destino;
+            d.voteDown();
+            return { ...state };
         }
     }
     return state;
