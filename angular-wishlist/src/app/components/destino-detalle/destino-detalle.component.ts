@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DestinoViaje } from '../models/destino-viaje.model';
-import { DestinosApiClient } from '../models/destinos-api-client.model';
+import { DestinoViaje } from '../../models/destino-viaje.model';
+import { DestinosApiClient } from '../../models/destinos-api-client.model';
 
 @Component({
   selector: 'app-destino-detalle',

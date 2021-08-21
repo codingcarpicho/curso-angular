@@ -4,7 +4,7 @@ import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn } from '@a
 import { fromEvent } from 'rxjs';
 import { map, filter, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { ajax, AjaxResponse } from 'rxjs/ajax';
-import { DestinoViaje } from '../models/destino-viaje.model';
+import { DestinoViaje } from '../../models/destino-viaje.model';
 
 
 
