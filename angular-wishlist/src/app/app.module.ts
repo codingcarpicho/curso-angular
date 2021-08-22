@@ -25,6 +25,7 @@ import { VuelosComponentComponent } from './components/vuelos/vuelos-component/v
 import { VuelosMainComponentComponent } from './components/vuelos/vuelos-main-component/vuelos-main-component.component';
 import { VuelosMasInfoComponentComponent } from './components/vuelos/vuelos-mas-info-component/vuelos-mas-info-component.component';
 import { VuelosDetalleComponentComponent } from './components/vuelos/vuelos-detalle-component/vuelos-detalle-component.component';
+import { ReservasModule } from './reservas/reservas.module';
 
 // definiendo direcciones del nav
 
@@ -89,7 +90,8 @@ let reducersInitialState = {
     ReactiveFormsModule,
     NgRxStoreModule.forRoot(reducers, { initialState: reducersInitialState }),
     EffectsModule.forRoot([DestinosViajesEffects]),
-    StoreDevtoolsModule.instrument()
+    StoreDevtoolsModule.instrument(),
+    ReservasModule
   ],
   providers: [
     DestinosApiClient, AuthService, UsuarioLogueadoGuard
