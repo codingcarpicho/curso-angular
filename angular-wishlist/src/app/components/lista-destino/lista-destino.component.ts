@@ -9,26 +9,29 @@ import { DestinosApiClient } from './../../models/destinos-api-client.model';
 @Component({
   selector: 'app-lista-destino',
   templateUrl: './lista-destino.component.html',
-  styleUrls: ['./lista-destino.component.css']
+  styleUrls: ['./lista-destino.component.css'],
+  providers: [DestinosApiClient]
 })
 export class ListaDestinoComponent implements OnInit {
   @Output() onItemAdded:EventEmitter<DestinoViaje>;
   updates: string[];
   all;
   //destinos: DestinoViaje[];
-  constructor(public destinosApiClient:DestinosApiClient, private store: Store<AppState>) { 
+  constructor(public destinosApiClient:DestinosApiClient, 
+    private store: Store<AppState>) { 
     this.onItemAdded = new EventEmitter();
     this.updates = [];
+    
+    store.select(state => state.destinos.items).subscribe(items => this.all = items);
+  }
+
+  ngOnInit(): void {
     this.store.select(state => state.destinos.favorito)
         .subscribe(d => {
           if (d != null) {
             this.updates.push('Se ha elegido a ' + d.nombre);
           }
         });
-    store.select(state => state.destinos.items).subscribe(items => this.all = items);
-  }
-
-  ngOnInit(): void {
   }
   /*
   guardar(nombre:string, url:string):boolean {
