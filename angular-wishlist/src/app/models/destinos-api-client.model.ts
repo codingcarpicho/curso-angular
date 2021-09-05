@@ -1,8 +1,9 @@
 //@ts-ignore
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
+import { forwardRef, Inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { AppState } from '../app.module';
+import { AppConfig, AppState, APP_CONFIG } from '../app.module';
 import { DestinoViaje } from './destino-viaje.model';
 import { ElegidoFavoritoAction, NuevoDestinoAction } from './destinos-viajes-state.model';
 
@@ -10,7 +11,11 @@ import { ElegidoFavoritoAction, NuevoDestinoAction } from './destinos-viajes-sta
  export class DestinosApiClient {
 	destinos: DestinoViaje[] = [];
 		
-		constructor(private store: Store<AppState>) {
+		constructor(
+			private store: Store<AppState>,
+			@Inject(forwardRef(() => APP_CONFIG)) private config: AppConfig,
+			private http: HttpClient
+			) {
 			this.store
 			.select(state => state.destinos)
 			.subscribe((data) => {
@@ -25,8 +30,14 @@ import { ElegidoFavoritoAction, NuevoDestinoAction } from './destinos-viajes-sta
 			});
 		}
 		
-		 add(d:DestinoViaje){
-		   this.store.dispatch(new NuevoDestinoAction(d));
+		 add(d: DestinoViaje){
+		   const headers: HttpHeaders = new HttpHeaders({'X-API-TOKEN': 'token-seguridad'});
+		   const req = new HttpRequest('POST', this.config.apiEndPoint + '/my', { nuevo: d.nombre }, { headers: headers });
+		   this.http.request(req).subscribe((data: HttpResponse<{}>) => {
+			   if (data.status === 200) {
+				   this.store.dispatch(new NuevoDestinoAction(d));
+			   }
+		   });
 		 }
 	
 		
