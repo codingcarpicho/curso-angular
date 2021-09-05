@@ -15,6 +15,8 @@ import { DestinosViajesEffects, DestinosViajeState, initializeDestinosViajesStat
 import { ActionReducerMap, Store } from '@ngrx/store';
 import { StoreModule as NgRxStoreModule } from '@ngrx/store';
 import { HttpClient, HttpClientModule, HttpHeaders, HttpRequest } from "@angular/common/http";
+import Dexie from 'dexie';
+
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 import { environment } from "../environments/environment";
@@ -27,6 +29,7 @@ import { VuelosMainComponentComponent } from './components/vuelos/vuelos-main-co
 import { VuelosMasInfoComponentComponent } from './components/vuelos/vuelos-mas-info-component/vuelos-mas-info-component.component';
 import { VuelosDetalleComponentComponent } from './components/vuelos/vuelos-detalle-component/vuelos-detalle-component.component';
 import { ReservasModule } from './reservas/reservas.module';
+import { DestinoViaje } from './models/destino-viaje.model';
 
 // app config
 export interface AppConfig {
@@ -93,6 +96,23 @@ class AppLoadService {
   }
 }
 //fin app init
+
+//dexie db
+@Injectable ({
+  providedIn: 'root'
+})
+export class MyDatabase extends Dexie {
+  destino: Dexie.Table<DestinoViaje, number>;
+  constructor () {
+    super('MyDatabase');
+    this.version(1).stores({
+      destino: '++id, nombre, imagenUrl',
+    });
+  }
+}
+
+export const db= new MyDatabase();
+//fin dexie db
 @NgModule({
   declarations: [
     AppComponent,
@@ -122,7 +142,8 @@ class AppLoadService {
   providers: [
     AuthService, UsuarioLogueadoGuard,
     { provide: APP_CONFIG, useValue: APP_CONFIG_VALUE },
-    AppLoadService, { provide: APP_INITIALIZER, useFactory: init_app, deps: [AppLoadService], multi: true }
+    AppLoadService, { provide: APP_INITIALIZER, useFactory: init_app, deps: [AppLoadService], multi: true },
+    MyDatabase
   ],
   bootstrap: [AppComponent]
 })
